@@ -11,8 +11,6 @@ defmodule AiusWebsiteWeb.PeriodView do
   end
 
   def render("period.json", %{period: period}) do
-    %{id: period.id,
-      start: period.start,
-      end: period.end}
+    %{id: period.id, start: period.start, end: period.end}
   end
 end

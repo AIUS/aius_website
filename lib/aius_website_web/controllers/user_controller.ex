@@ -10,7 +10,9 @@ defmodule AiusWebsiteWeb.UserController do
 
   def index(conn, _params) do
     users = Members.list_users()
-    render(conn, "index.json", users: users)
+
+    conn
+    |> render("index.json", users: users)
   end
 
   def create(conn, %{"user" => user_params}) do

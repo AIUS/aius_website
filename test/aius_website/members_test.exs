@@ -6,8 +6,19 @@ defmodule AiusWebsite.MembersTest do
   describe "user" do
     alias AiusWebsite.Members.User
 
-    @valid_attrs %{email: "some@email", first_name: "some first_name", last_name: "some last_name", middle_name: "some middle_name", subscribed: true}
-    @update_attrs %{email: "some_updated@email", first_name: "some updated first_name", last_name: "some updated last_name", middle_name: "some updated middle_name"}
+    @valid_attrs %{
+      email: "some@email",
+      first_name: "some first_name",
+      last_name: "some last_name",
+      middle_name: "some middle_name",
+      subscribed: true
+    }
+    @update_attrs %{
+      email: "some_updated@email",
+      first_name: "some updated first_name",
+      last_name: "some updated last_name",
+      middle_name: "some updated middle_name"
+    }
     @invalid_attrs %{email: nil, first_name: nil, last_name: nil, middle_name: nil}
 
     def user_fixture(attrs \\ %{}) do
@@ -78,15 +89,14 @@ defmodule AiusWebsite.MembersTest do
     def membership_fixture(attrs \\ %{}) do
       user = user_fixture()
 
-      {:ok, membership} =
-        Members.create_membership(user, Enum.into(attrs, @valid_attrs))
+      {:ok, membership} = Members.create_membership(user, Enum.into(attrs, @valid_attrs))
 
       membership
     end
 
     test "list_memberships/0 returns all memberships" do
       membership = membership_fixture()
-      assert (Members.list_memberships(membership.user) |> Repo.preload(:user)) == [membership]
+      assert Members.list_memberships(membership.user) |> Repo.preload(:user) == [membership]
     end
 
     test "get_membership!/1 returns the membership with given id" do
@@ -106,7 +116,9 @@ defmodule AiusWebsite.MembersTest do
 
     test "update_membership/2 with valid data updates the membership" do
       membership = membership_fixture()
-      assert {:ok, %Membership{} = membership} = Members.update_membership(membership, @update_attrs)
+
+      assert {:ok, %Membership{} = membership} =
+               Members.update_membership(membership, @update_attrs)
     end
 
     test "update_membership/2 with invalid data returns error changeset" do
@@ -118,7 +130,10 @@ defmodule AiusWebsite.MembersTest do
     test "delete_membership/1 deletes the membership" do
       membership = membership_fixture()
       assert {:ok, %Membership{}} = Members.delete_membership(membership)
-      assert_raise Ecto.NoResultsError, fn -> Members.get_membership!(membership.user, membership.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Members.get_membership!(membership.user, membership.id)
+      end
     end
 
     test "change_membership/1 returns a membership changeset" do

@@ -12,8 +12,10 @@ defmodule AiusWebsiteWeb.MembershipView do
   end
 
   def render("membership.json", %{membership: membership}) do
-    %{id: membership.id,
+    %{
+      id: membership.id,
       valid: membership.valid,
-      period: render_one(membership.period, PeriodView, "period.json")}
+      period: render_one(membership.period, PeriodView, "period.json")
+    }
   end
 end

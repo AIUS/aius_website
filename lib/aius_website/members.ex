@@ -18,8 +18,10 @@ defmodule AiusWebsite.Members do
 
   """
   def list_users do
-    Repo.all from u in User,
-      preload: [:memberships, memberships: :period]
+    Repo.all(
+      from u in User,
+        preload: [:memberships, memberships: :period]
+    )
   end
 
   @doc """
@@ -126,8 +128,10 @@ defmodule AiusWebsite.Members do
 
   """
   def list_memberships(%User{} = user) do
-    Repo.all from m in Ecto.assoc(user, :memberships),
-      preload: [:period]
+    Repo.all(
+      from m in Ecto.assoc(user, :memberships),
+        preload: [:period]
+    )
   end
 
   @doc """

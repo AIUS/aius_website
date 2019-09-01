@@ -5,17 +5,17 @@ defmodule AiusWebsite.Repo.Migrations.AddAuthors do
   def change do
     alter table(:users) do
       add :inserted_by, :string
-      add :updated_by,  :string
+      add :updated_by, :string
     end
 
     alter table(:periods) do
       add :inserted_by, :string
-      add :updated_by,  :string
+      add :updated_by, :string
     end
 
     alter table(:memberships) do
       add :inserted_by, :string
-      add :updated_by,  :string
+      add :updated_by, :string
     end
   end
 end
