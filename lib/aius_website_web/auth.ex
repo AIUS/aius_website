@@ -10,6 +10,7 @@ defmodule AiusWebsiteWeb.Auth do
       error ->
         conn
         |> AiusWebsiteWeb.FallbackController.call({:error, :unauthorized})
+        |> halt
     end
   end
 
