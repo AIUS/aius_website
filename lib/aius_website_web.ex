@@ -23,6 +23,7 @@ defmodule AiusWebsiteWeb do
 
       import Plug.Conn
       import AiusWebsiteWeb.Gettext
+      import AiusWebsiteWeb.Auth
       alias AiusWebsiteWeb.Router.Helpers, as: Routes
     end
   end

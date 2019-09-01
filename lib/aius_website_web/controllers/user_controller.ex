@@ -6,6 +6,8 @@ defmodule AiusWebsiteWeb.UserController do
 
   action_fallback AiusWebsiteWeb.FallbackController
 
+  plug :authenticate when action not in [:index]
+
   def index(conn, _params) do
     users = Members.list_users()
     render(conn, "index.json", users: users)

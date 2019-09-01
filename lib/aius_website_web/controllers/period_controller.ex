@@ -6,6 +6,8 @@ defmodule AiusWebsiteWeb.PeriodController do
 
   action_fallback AiusWebsiteWeb.FallbackController
 
+  plug :authenticate when action not in [:index]
+
   def index(conn, _params) do
     periods = Term.list_periods()
     render(conn, "index.json", periods: periods)

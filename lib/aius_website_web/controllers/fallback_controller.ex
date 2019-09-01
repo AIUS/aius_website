@@ -13,6 +13,13 @@ defmodule AiusWebsiteWeb.FallbackController do
     |> render("error.json", changeset: changeset)
   end
 
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:forbidden)
+    |> put_view(AiusWebsiteWeb.ErrorView)
+    |> render(:"403")
+  end
+
   def call(conn, {:error, :not_found}) do
     conn
     |> put_status(:not_found)
