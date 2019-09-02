@@ -23,7 +23,7 @@ defmodule AiusWebsite.Members.User do
     user
     |> cast(attrs, [:first_name, :middle_name, :last_name, :email, :subscribed])
     |> cast_assoc(:memberships, with: &Membership.changeset/2)
-    |> set_author("bar")
+    |> set_author(Map.get(attrs, :author))
     |> validate_required([:first_name, :last_name, :email])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)

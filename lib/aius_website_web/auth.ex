@@ -1,13 +1,17 @@
 defmodule AiusWebsiteWeb.Auth do
   import Plug.Conn
 
-  def authenticate(conn, _) do
-    case extract_token(conn) do
-      {:ok, token} ->
-        conn
-        |> assign(:token, token)
+  def add_author(params, conn) do
+    Map.put(params, "author", conn.assigns.claims["sub"])
+  end
 
-      error ->
+  def authenticate(conn, _) do
+    with {:ok, token} <- extract_token(conn),
+         {:ok, claims} <- OpenIDConnect.verify(:aius, token) do
+      conn
+      |> assign(:claims, claims)
+    else
+      _err ->
         conn
         |> AiusWebsiteWeb.FallbackController.call({:error, :unauthorized})
         |> halt

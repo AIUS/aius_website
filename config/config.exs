@@ -25,6 +25,15 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :aius_website, :openid_connect_providers,
+  aius: [
+    discovery_document_uri:
+      "https://sso.aius.u-strasbg.fr/realms/master/.well-known/openid-configuration",
+    response_type: "id_token",
+    scope: "openid email profile",
+    client_id: "aius-website"
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

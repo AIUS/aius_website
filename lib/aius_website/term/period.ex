@@ -15,7 +15,7 @@ defmodule AiusWebsite.Term.Period do
   def changeset(period, attrs) do
     period
     |> cast(attrs, [:start, :end])
-    |> set_author("baz")
+    |> set_author(Map.get(attrs, :author))
     |> validate_required([:start, :end])
     |> check_constraint(:start, name: :boundaries_in_order)
     |> check_constraint(:end, name: :boundaries_in_order)

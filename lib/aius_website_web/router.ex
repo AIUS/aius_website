@@ -27,5 +27,7 @@ defmodule AiusWebsiteWeb.Router do
     end
 
     resources "/periods", PeriodController
+
+    get "/auth/uri", AuthController, :uri
   end
 end

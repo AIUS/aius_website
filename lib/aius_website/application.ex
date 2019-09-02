@@ -11,9 +11,8 @@ defmodule AiusWebsite.Application do
       # Start the Ecto repository
       AiusWebsite.Repo,
       # Start the endpoint when the application starts
-      AiusWebsiteWeb.Endpoint
-      # Starts a worker by calling: AiusWebsite.Worker.start_link(arg)
-      # {AiusWebsite.Worker, arg},
+      AiusWebsiteWeb.Endpoint,
+      {OpenIDConnect.Worker, Application.get_env(:aius_website, :openid_connect_providers)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

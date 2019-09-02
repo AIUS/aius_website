@@ -14,9 +14,10 @@ defmodule AiusWebsiteWeb.MembershipController do
   end
 
   def create(conn, %{"user_id" => user_id, "membership" => membership_params}) do
+    params = membership_params |> add_author(conn)
     user = Members.get_user!(user_id)
 
-    with {:ok, %Membership{} = membership} <- Members.create_membership(user, membership_params) do
+    with {:ok, %Membership{} = membership} <- Members.create_membership(user, params) do
       conn
       |> put_status(:created)
       |> put_resp_header(
@@ -36,12 +37,14 @@ defmodule AiusWebsiteWeb.MembershipController do
   end
 
   def update(conn, %{"user_id" => user_id, "id" => id, "membership" => membership_params}) do
+    params = membership_params |> add_author(conn)
+
     membership =
       Members.get_user!(user_id)
       |> Members.get_membership!(id)
 
     with {:ok, %Membership{} = membership} <-
-           Members.update_membership(membership, membership_params) do
+           Members.update_membership(membership, params) do
       render(conn, "show.json", membership: membership)
     end
   end

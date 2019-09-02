@@ -19,7 +19,7 @@ defmodule AiusWebsite.Members.Membership do
   def changeset(membership, attrs) do
     membership
     |> cast(attrs, [:valid, :user_id, :period_id])
-    |> set_author("foo")
+    |> set_author(Map.get(attrs, "author"))
     |> assoc_constraint(:user)
     |> assoc_constraint(:period)
     |> validate_required([:valid])

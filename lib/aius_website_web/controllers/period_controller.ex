@@ -14,7 +14,9 @@ defmodule AiusWebsiteWeb.PeriodController do
   end
 
   def create(conn, %{"period" => period_params}) do
-    with {:ok, %Period{} = period} <- Term.create_period(period_params) do
+    params = period_params |> add_author(conn)
+
+    with {:ok, %Period{} = period} <- Term.create_period(params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.period_path(conn, :show, period))
@@ -28,9 +30,10 @@ defmodule AiusWebsiteWeb.PeriodController do
   end
 
   def update(conn, %{"id" => id, "period" => period_params}) do
+    params = period_params |> add_author(conn)
     period = Term.get_period!(id)
 
-    with {:ok, %Period{} = period} <- Term.update_period(period, period_params) do
+    with {:ok, %Period{} = period} <- Term.update_period(period, params) do
       render(conn, "show.json", period: period)
     end
   end
