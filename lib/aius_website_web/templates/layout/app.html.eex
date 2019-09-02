@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Hello React!</title>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
   </head>
   <body>
     <div id="app">Please enable JavaScript!</div>
