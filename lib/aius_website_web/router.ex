@@ -13,12 +13,6 @@ defmodule AiusWebsiteWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", AiusWebsiteWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
-  end
-
   scope "/api", AiusWebsiteWeb do
     pipe_through :api
 
@@ -29,5 +23,11 @@ defmodule AiusWebsiteWeb.Router do
     resources "/periods", PeriodController
 
     get "/auth/uri", AuthController, :uri
+  end
+
+  scope "/", AiusWebsiteWeb do
+    pipe_through :browser
+
+    get "/*path", PageController, :index
   end
 end
