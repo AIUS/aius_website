@@ -2,7 +2,7 @@ import React from 'react';
 
 import Form from './Form';
 import { useAuth } from './AuthProvider';
-import '../../node_modules/bulma/css/bulma.min.css';
+import 'bulma/css/bulma.min.css';
 
 export const Hello = () => {
   const { claims, logout } = useAuth();
