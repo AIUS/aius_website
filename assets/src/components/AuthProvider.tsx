@@ -33,7 +33,7 @@ const AuthContext: Context<AuthContextValue> = createContext({
   logout: () => {},
   claims: null,
 });
-const useAuth = () => useContext(AuthContext);
+const useAuth = (): AuthContextValue => useContext(AuthContext);
 
 interface AuthProviderProps {
   children?: ReactNode;
@@ -42,7 +42,7 @@ interface AuthProviderProps {
 const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({ children }: AuthProviderProps) => {
   const response = useFetch('/api/auth/uri');
   const [token, setToken] = useLocalStorage('token', null, true);
-  const logout = () => setToken(null);
+  const logout = (): void => setToken(null);
 
   let claims: TokenClaims | null = null;
   if (token) {

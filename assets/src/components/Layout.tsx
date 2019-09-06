@@ -7,7 +7,7 @@ import Header from './Header';
 import Home from '../pages/Home';
 import Members from '../pages/Members';
 
-export default () => (
+const Layout: React.FunctionComponent = () => (
   <Router>
     <Header />
 
@@ -17,3 +17,5 @@ export default () => (
     </main>
   </Router>
 );
+
+export default Layout;

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 import { useAuth } from './AuthProvider';
 
-export default () => {
+const Header: React.FunctionComponent = () => {
   const { claims } = useAuth();
 
   return (
@@ -32,3 +32,5 @@ export default () => {
     </nav>
   );
 };
+
+export default Header;

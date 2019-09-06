@@ -55,14 +55,11 @@ const MembersList = ({ match }: RouteComponentProps) => {
         </Link>
       </div>
       <pre>
-        <code>
-          {JSON.stringify(members, null, 2)}
-        </code>
+        <code>{JSON.stringify(members, null, 2)}</code>
       </pre>
     </>
-  )
+  );
 };
-
 
 const AddMember = ({ match }: RouteComponentProps) => {
   const { token } = useAuth();
@@ -74,7 +71,7 @@ const AddMember = ({ match }: RouteComponentProps) => {
 
   const r = MembersV.decode(response);
   if (isLeft(r)) {
-    throw new Error("Error");
+    throw new Error('Error');
   }
   const members = r.right.data;
 
@@ -112,7 +109,7 @@ const AddMember = ({ match }: RouteComponentProps) => {
         </label>
       </form>
     </>
-  )
+  );
 };
 
 export default ({ match }: RouteComponentProps) => {
