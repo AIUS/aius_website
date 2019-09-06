@@ -10,5 +10,5 @@ ReactDOM.render(
       <Layout />
     </AuthProvider>
   </Suspense>,
-  document.getElementById('app')
+  document.getElementById('app'),
 );

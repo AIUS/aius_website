@@ -2,19 +2,31 @@ import useFetch from 'fetch-suspense';
 import qs from 'querystring';
 import { useLocalStorage } from 'react-use';
 import jwt from 'jsonwebtoken';
-import React, { useEffect, Suspense, createContext, useContext, ReactNode, Context } from 'react';
+import React, { createContext, useContext, ReactNode, Context } from 'react';
+import * as t from 'io-ts';
+import { fold, isRight } from 'fp-ts/lib/Either';
+
+const TokenClaimsV = t.type({
+  sub: t.string,
+  name: t.string,
+  email: t.string,
+});
 
 interface TokenClaims {
-  sub: string,
-  name: string,
-  email: string,
-};
+  sub: string;
+  name: string;
+  email: string;
+}
+
+const AuthURIResponseV = t.type({
+  uri: t.string,
+});
 
 interface AuthContextValue {
-  token: string | null,
-  logout: () => void,
-  claims: TokenClaims | null,
-};
+  token: string | null;
+  logout: () => void;
+  claims: TokenClaims | null;
+}
 
 const AuthContext: Context<AuthContextValue> = createContext({
   token: null,
@@ -23,57 +35,47 @@ const AuthContext: Context<AuthContextValue> = createContext({
 });
 const useAuth = () => useContext(AuthContext);
 
-const validateClaims = (claims: any): null | TokenClaims => {
-  if (claims
-    && claims.sub
-    && claims.name
-    && claims.email) {
-    return {
-      sub: claims.sub,
-      name: claims.name,
-      email: claims.email,
-    };
-  }
-  return null;
+interface AuthProviderProps {
+  children?: ReactNode;
 }
 
-const extractURI = (response: any): string => {
-  if (response.uri) {
-    return response.uri;
-  }
-  throw new Error("Invalid response from API");
-}
-
-
-const AuthProvider = ({ children }: { children?: ReactNode }) => {
+const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({ children }: AuthProviderProps) => {
   const response = useFetch('/api/auth/uri');
   const [token, setToken] = useLocalStorage('token', null, true);
   const logout = () => setToken(null);
 
   let claims: TokenClaims | null = null;
   if (token) {
-    claims = validateClaims(jwt.decode(token));
+    const c = jwt.decode(token);
+    const d = TokenClaimsV.decode(c);
+    claims = fold(() => null, (t: TokenClaims) => t)(d);
   }
 
   const params = qs.parse(window.location.hash.replace(/^#/, ''));
   if (params.id_token) {
     setToken(params.id_token);
-    window.location.hash = "";
-  }
-  else if (params.error) {
+    window.location.hash = '';
+  } else if (params.error) {
     console.log(params);
     throw new Error();
-  }
-  else if (!claims || !claims.sub) {
-    window.location.href = extractURI(response);
+  } else if (!claims || !claims.sub) {
+    const d = AuthURIResponseV.decode(response);
+
+    if (isRight(d)) {
+      window.location.href = d.right.uri;
+    } else {
+      throw new Error();
+    }
   }
 
   return (
-    <AuthContext.Provider value={{
-      token,
-      logout,
-      claims,
-    }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        logout,
+        claims,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

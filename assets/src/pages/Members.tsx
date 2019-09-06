@@ -1,28 +1,32 @@
 import React, { Fragment } from 'react';
 import useFetch from 'fetch-suspense';
 import * as t from 'io-ts';
-import { isLeft } from 'fp-ts/lib/Either'
+import { isLeft } from 'fp-ts/lib/Either';
 
 import { useAuth } from '../components/AuthProvider';
 import { RouteComponentProps } from 'react-router';
 import { Link, Route } from 'react-router-dom';
 
 const MembersV = t.type({
-  data: t.array(t.type({
-    id: t.number,
-    first_name: t.string,
-    middle_name: t.string,
-    last_name: t.string,
-    email: t.string,
-    memberships: t.array(t.type({
-      valid: t.boolean,
-      period: t.type({
-        id: t.number,
-        start: t.string,
-        end: t.string,
-      }),
-    })),
-  }))
+  data: t.array(
+    t.type({
+      id: t.number,
+      first_name: t.string,
+      middle_name: t.string,
+      last_name: t.string,
+      email: t.string,
+      memberships: t.array(
+        t.type({
+          valid: t.boolean,
+          period: t.type({
+            id: t.number,
+            start: t.string,
+            end: t.string,
+          }),
+        }),
+      ),
+    }),
+  ),
 });
 
 const MembersList = ({ match }: RouteComponentProps) => {
@@ -35,7 +39,7 @@ const MembersList = ({ match }: RouteComponentProps) => {
 
   const r = MembersV.decode(response);
   if (isLeft(r)) {
-    throw new Error("Error");
+    throw new Error('Error');
   }
   const members = r.right.data;
 
