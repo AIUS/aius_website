@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import 'bulma/css/bulma.min.css';
 
 import Header from './Header';
@@ -12,8 +12,10 @@ const Layout: React.FunctionComponent = () => (
     <Header />
 
     <main className="section">
-      <Route path="/" exact component={Home} />
-      <Route path="/members/" component={Members} />
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/members/" component={Members} />
+      </Switch>
     </main>
   </Router>
 );
