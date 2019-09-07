@@ -1,5 +1,27 @@
 import React from 'react';
-import { useForm, useField } from 'react-final-form-hooks';
+import { useForm, useField, FieldRenderProps } from 'react-final-form-hooks';
+
+interface FFProps {
+  field: FieldRenderProps;
+  label: string;
+  placeholder: string;
+  type: string;
+}
+
+const FormField: React.FunctionComponent<FFProps> = ({ field, label, placeholder, type }: FFProps) => (
+  <div className="field">
+    <label className="label">{label}</label>
+    <div className="control">
+      <input
+        {...field.input}
+        className={field.meta.touched && field.meta.error ? 'input is-danger' : 'input'}
+        type={type}
+        placeholder={placeholder}
+      />
+    </div>
+    {field.meta.touched && field.meta.error && <p className="help is-danger">{field.meta.error}</p>}
+  </div>
+);
 
 const onSubmit = (): void => {};
 
@@ -40,50 +62,11 @@ const AddMember: React.FunctionComponent = () => {
 
   return (
     <>
-      <h1 className="level-left">Add member</h1>
       <form onSubmit={handleSubmit}>
-        <div className="field">
-          <label className="label">First name</label>
-          <div className="control">
-            <input
-              {...firstName.input}
-              className={firstName.meta.touched && firstName.meta.error ? 'input is-danger' : 'input'}
-              type="text"
-              placeholder="First name..."
-            />
-          </div>
-          {firstName.meta.touched && firstName.meta.error && <p className="help is-danger">{firstName.meta.error}</p>}
-        </div>
-        <div className="field">
-          <label className="label">Middle name</label>
-          <div className="control">
-            <input {...middleName.input} className="input" type="text" placeholder="Middle name..." />
-          </div>
-        </div>
-        <div className="field">
-          <label className="label">Last name</label>
-          <div className="control">
-            <input
-              {...lastName.input}
-              className={lastName.meta.touched && lastName.meta.error ? 'input is-danger' : 'input'}
-              type="text"
-              placeholder="Last name..."
-            />
-          </div>
-          {lastName.meta.touched && lastName.meta.error && <p className="help is-danger">{lastName.meta.error}</p>}
-        </div>
-        <div className="field">
-          <label className="label">Email address</label>
-          <div className="control">
-            <input
-              {...email.input}
-              className={email.meta.touched && email.meta.error ? 'input is-danger' : 'input'}
-              type="email"
-              placeholder="Email address..."
-            />
-          </div>
-          {email.meta.touched && email.meta.error && <p className="help is-danger">{email.meta.error}</p>}
-        </div>
+        <FormField field={firstName} label="First name" placeholder="John" type="text" />
+        <FormField field={middleName} label="Middle name" placeholder="Bob" type="text" />
+        <FormField field={lastName} label="Last name" placeholder="Doe" type="text" />
+        <FormField field={email} label="Email address" placeholder="john.doe@example.com" type="email" />
         <label className="checkbox">
           <input {...subscribed.input} type="checkbox" />
           {' Subscribed?'}

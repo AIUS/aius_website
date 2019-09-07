@@ -1,6 +1,6 @@
 import React from 'react';
 import useFetch from 'fetch-suspense';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import * as t from 'io-ts';
 import { isLeft } from 'fp-ts/lib/Either';
 
@@ -32,7 +32,7 @@ const MembersV = t.type({
 
 type Props = RouteComponentProps;
 
-const MembersList: React.FunctionComponent<Props> = ({ match }: Props) => {
+const MembersList: React.FunctionComponent<Props> = () => {
   const { token } = useAuth();
   const response = useFetch('/api/users', {
     headers: {
@@ -48,15 +48,6 @@ const MembersList: React.FunctionComponent<Props> = ({ match }: Props) => {
 
   return (
     <>
-      <div className="level">
-        <h1 className="level-left">Members list</h1>
-        <Link className="level-right button is-primary" to={`${match.path}add`}>
-          <span className="icon">
-            <i className="fas fa-plus"></i>
-          </span>
-          <span>Add member</span>
-        </Link>
-      </div>
       <pre>
         <code>{JSON.stringify(members, null, 2)}</code>
       </pre>
