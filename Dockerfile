@@ -72,6 +72,7 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY --from=build /app/_build/prod/rel/aius_website ./
+RUN chown nobody: .
 USER nobody
 
 ENV HOME=/app
