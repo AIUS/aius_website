@@ -7,6 +7,7 @@ defmodule AiusWebsite.Members.Membership do
 
   schema "memberships" do
     field :valid, :boolean
+    field :situation, :string
 
     belongs_to :user, User
     belongs_to :period, Period
@@ -18,10 +19,10 @@ defmodule AiusWebsite.Members.Membership do
   @doc false
   def changeset(membership, attrs) do
     membership
-    |> cast(attrs, [:valid, :user_id, :period_id])
+    |> cast(attrs, [:valid, :situation, :user_id, :period_id])
     |> set_author(Map.get(attrs, "author"))
     |> assoc_constraint(:user)
     |> assoc_constraint(:period)
-    |> validate_required([:valid])
+    |> validate_required([:valid, :situation])
   end
 end

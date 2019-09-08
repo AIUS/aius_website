@@ -15,6 +15,9 @@ defmodule AiusWebsiteWeb.MembershipView do
     %{
       id: membership.id,
       valid: membership.valid,
+      situation: membership.situation,
+      inserted_at: membership.inserted_at,
+      updated_at: membership.updated_at,
       period: render_one(membership.period, PeriodView, "period.json")
     }
   end

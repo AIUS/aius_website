@@ -33,6 +33,8 @@ interface FormValues {
   lastName?: string;
   email?: string;
   subscribed?: boolean;
+  situation?: string;
+  birthdate?: string;
 }
 
 const validateForm = (values: FormValues): FormValues => {
@@ -42,6 +44,9 @@ const validateForm = (values: FormValues): FormValues => {
   }
   if (!values.lastName) {
     errors.lastName = 'Required';
+  }
+  if (!values.situation) {
+    errors.situation = 'Required';
   }
   if (!values.email) {
     errors.email = 'Required';
@@ -56,7 +61,7 @@ type Props = RouteComponentProps;
 const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
   const [period, setPeriod] = useState(-1);
   const { token } = useAuth();
-  const { form, handleSubmit, values, pristine, submitting } = useForm({
+  const { form, handleSubmit, pristine, submitting } = useForm({
     onSubmit(v: FormValues) {
       return fetch('/api/users', {
         method: 'POST',
@@ -71,10 +76,12 @@ const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
             middle_name: v.middleName,
             last_name: v.lastName,
             subscribed: v.subscribed,
+            birthdate: v.birthdate,
             memberships: [
               {
                 period_id: period,
                 valid: true,
+                situation: v.situation,
               },
             ],
           },
@@ -94,31 +101,30 @@ const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
   const lastName = useField('lastName', form);
   const email = useField('email', form);
   const subscribed = useField('subscribed', form);
+  const situation = useField('situation', form);
+  const birthdate = useField('birthdate', form);
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <PeriodList selected={period} onChange={setPeriod} />
-        <FormField field={firstName} label="First name" placeholder="John" type="text" />
-        <FormField field={middleName} label="Middle name" placeholder="Bob" type="text" />
-        <FormField field={lastName} label="Last name" placeholder="Doe" type="text" />
-        <FormField field={email} label="Email address" placeholder="john.doe@example.com" type="email" />
-        <label className="checkbox">
-          <input {...subscribed.input} type="checkbox" />
-          {' Subscribed?'}
-        </label>
-        <div className="field">
-          <div className="control">
-            <button className="button is-primary" type="submit" disabled={pristine || submitting}>
-              Create
-            </button>
-          </div>
+    <form onSubmit={handleSubmit}>
+      <PeriodList selected={period} onChange={setPeriod} />
+      <FormField field={firstName} label="First name" placeholder="John" type="text" />
+      <FormField field={middleName} label="Middle name" placeholder="Bob" type="text" />
+      <FormField field={lastName} label="Last name" placeholder="Doe" type="text" />
+      <FormField field={email} label="Email address" placeholder="john.doe@example.com" type="email" />
+      <FormField field={birthdate} label="Birthdate" placeholder="1997/06/14" type="date" />
+      <FormField field={situation} label="Situation" placeholder="L2 math" type="text" />
+      <label className="checkbox">
+        <input {...subscribed.input} type="checkbox" />
+        {' Subscribed?'}
+      </label>
+      <div className="field">
+        <div className="control">
+          <button className="button is-primary" type="submit" disabled={pristine || submitting}>
+            Create
+          </button>
         </div>
-      </form>
-      <pre>
-        <code>{JSON.stringify(values, null, 2)}</code>
-      </pre>
-    </>
+      </div>
+    </form>
   );
 };
 

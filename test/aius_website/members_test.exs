@@ -11,6 +11,7 @@ defmodule AiusWebsite.MembersTest do
       first_name: "some first_name",
       last_name: "some last_name",
       middle_name: "some middle_name",
+      birthdate: "1997-06-14",
       subscribed: true
     }
     @update_attrs %{
@@ -82,7 +83,7 @@ defmodule AiusWebsite.MembersTest do
   describe "memberships" do
     alias AiusWebsite.Members.Membership
 
-    @valid_attrs %{valid: true}
+    @valid_attrs %{valid: true, situation: "baz"}
     @update_attrs %{valid: false}
     @invalid_attrs %{valid: nil}
 

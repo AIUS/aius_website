@@ -18,6 +18,7 @@ defmodule AiusWebsiteWeb.MembershipControllerTest do
         first_name: "John",
         last_name: "Doe",
         email: "john.doe@example.com",
+        birthdate: "1997-06-14",
         subscribed: true
       })
 
@@ -27,7 +28,10 @@ defmodule AiusWebsiteWeb.MembershipControllerTest do
   def fixture(:membership) do
     user = fixture(:user)
     period = fixture(:period)
-    {:ok, membership} = Members.create_membership(user, %{period_id: period.id, valid: true})
+
+    {:ok, membership} =
+      Members.create_membership(user, %{period_id: period.id, valid: true, situation: "bar"})
+
     membership
   end
 
@@ -56,7 +60,8 @@ defmodule AiusWebsiteWeb.MembershipControllerTest do
         post(conn, Routes.user_membership_path(conn, :create, user_id),
           membership: %{
             period_id: period_id,
-            valid: true
+            valid: true,
+            situation: "foo"
           }
         )
 
@@ -70,7 +75,8 @@ defmodule AiusWebsiteWeb.MembershipControllerTest do
                "period" => %{
                  "start" => "2019-09-01",
                  "end" => "2020-08-31"
-               }
+               },
+               "situation" => "foo"
              } = json_response(conn, 200)["data"]
     end
 

@@ -11,6 +11,7 @@ interface Membership {
   id: number;
   period: Period;
   valid: boolean;
+  situation: string;
 }
 
 interface Props {
@@ -69,7 +70,8 @@ const MembershipWidget: React.FunctionComponent<Props> = ({ membership, userId }
 
   return (
     <>
-      {period} | <input type="checkbox" disabled={updating} checked={valid} onChange={handleChange} /> Valid
+      {period} | <input type="checkbox" disabled={updating} checked={valid} onChange={handleChange} /> Valid |{' '}
+      {membership.situation}
     </>
   );
 };

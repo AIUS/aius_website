@@ -8,7 +8,8 @@ defmodule AiusWebsiteWeb.UserControllerTest do
     email: "some@email",
     first_name: "some first_name",
     last_name: "some last_name",
-    middle_name: "some middle_name"
+    middle_name: "some middle_name",
+    birthdate: "1997-06-14"
   }
   @update_attrs %{
     email: "some_updated@email",
@@ -46,7 +47,8 @@ defmodule AiusWebsiteWeb.UserControllerTest do
                "email" => "some@email",
                "first_name" => "some first_name",
                "last_name" => "some last_name",
-               "middle_name" => "some middle_name"
+               "middle_name" => "some middle_name",
+               "birthdate" => "1997-06-14"
              } = json_response(conn, 200)["data"]
     end
 

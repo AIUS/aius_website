@@ -3,6 +3,7 @@ import useFetch from 'fetch-suspense';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import * as t from 'io-ts';
 import { isLeft } from 'fp-ts/lib/Either';
+import { PathReporter } from 'io-ts/lib/PathReporter';
 
 import { useAuth } from '../../components/AuthProvider';
 import MembershipWidget from '../../components/MembershipWidget';
@@ -18,10 +19,12 @@ const MembersV = t.type({
       /* eslint-enable @typescript-eslint/camelcase */
       email: t.string,
       subscribed: t.boolean,
+      birthdate: t.union([t.string, t.nullType]),
       memberships: t.array(
         t.type({
           id: t.number,
           valid: t.boolean,
+          situation: t.string,
           period: t.type({
             id: t.number,
             start: t.string,
@@ -45,7 +48,7 @@ const MembersList: React.FunctionComponent<Props> = () => {
 
   const r = MembersV.decode(response);
   if (isLeft(r)) {
-    throw new Error('Error');
+    throw new Error(PathReporter.report(r).join(','));
   }
   const members = r.right.data;
 
@@ -57,11 +60,12 @@ const MembersList: React.FunctionComponent<Props> = () => {
           <th>Name</th>
           <th>Email</th>
           <th>Subscribed</th>
+          <th>Birth date</th>
           <th>Memberships</th>
         </tr>
       </thead>
       <tbody>
-        {members.map(({ id, first_name, middle_name, last_name, email, memberships, subscribed }) => (
+        {members.map(({ id, first_name, middle_name, last_name, email, birthdate, memberships, subscribed }) => (
           <tr key={id}>
             <td>
               <Link to={`/members/${id}/`}>{id}</Link>
@@ -75,6 +79,7 @@ const MembersList: React.FunctionComponent<Props> = () => {
             <td>
               <i className={subscribed ? 'far fa-check-circle' : 'far fa-times-circle'} />
             </td>
+            <td>{birthdate}</td>
             <td>
               {memberships.map(membership => (
                 <div key={membership.id}>

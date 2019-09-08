@@ -19,6 +19,9 @@ defmodule AiusWebsiteWeb.UserView do
       last_name: user.last_name,
       email: user.email,
       subscribed: user.subscribed,
+      birthdate: user.birthdate,
+      inserted_at: user.inserted_at,
+      updated_at: user.updated_at,
       memberships: render_many(user.memberships, MembershipView, "membership.json")
     }
   end
