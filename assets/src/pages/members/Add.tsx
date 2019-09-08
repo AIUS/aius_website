@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { useForm, useField, FieldRenderProps } from 'react-final-form-hooks';
+
+import { useAuth } from '../../components/AuthProvider';
+import PeriodList from '../../components/PeriodList';
 
 interface FFProps {
   field: FieldRenderProps;
@@ -22,8 +26,6 @@ const FormField: React.FunctionComponent<FFProps> = ({ field, label, placeholder
     {field.meta.touched && field.meta.error && <p className="help is-danger">{field.meta.error}</p>}
   </div>
 );
-
-const onSubmit = (): void => {};
 
 interface FormValues {
   firstName?: string;
@@ -49,9 +51,42 @@ const validateForm = (values: FormValues): FormValues => {
   return errors;
 };
 
-const AddMember: React.FunctionComponent = () => {
+type Props = RouteComponentProps;
+
+const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
+  const [period, setPeriod] = useState(-1);
+  const { token } = useAuth();
   const { form, handleSubmit, values, pristine, submitting } = useForm({
-    onSubmit,
+    onSubmit(v: FormValues) {
+      return fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: {
+            email: v.email,
+            first_name: v.firstName,
+            middle_name: v.middleName,
+            last_name: v.lastName,
+            subscribed: v.subscribed,
+            memberships: [
+              {
+                period_id: period,
+                valid: true,
+              },
+            ],
+          },
+        }),
+      })
+        .then(r => r.json())
+        .then(r => {
+          if (r.errors || !r.data) throw new Error(r.errors);
+
+          history.push(`/members/${r.data.id}`);
+        });
+    },
     validate: validateForm,
   });
   const firstName = useField('firstName', form);
@@ -63,6 +98,7 @@ const AddMember: React.FunctionComponent = () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
+        <PeriodList selected={period} onChange={setPeriod} />
         <FormField field={firstName} label="First name" placeholder="John" type="text" />
         <FormField field={middleName} label="Middle name" placeholder="Bob" type="text" />
         <FormField field={lastName} label="Last name" placeholder="Doe" type="text" />
