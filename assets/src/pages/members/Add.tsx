@@ -8,12 +8,13 @@ import PeriodList from '../../components/PeriodList';
 interface FFProps {
   field: FieldRenderProps;
   label: string;
-  placeholder: string;
+  placeholder?: string;
   type: string;
+  className?: string;
 }
 
-const FormField: React.FunctionComponent<FFProps> = ({ field, label, placeholder, type }: FFProps) => (
-  <div className="field">
+const FormField: React.FunctionComponent<FFProps> = ({ field, label, placeholder, type, className }: FFProps) => (
+  <div className={`field column is-marginless ${className}`}>
     <label className="label">{label}</label>
     <div className="control">
       <input
@@ -23,7 +24,9 @@ const FormField: React.FunctionComponent<FFProps> = ({ field, label, placeholder
         placeholder={placeholder}
       />
     </div>
-    {field.meta.touched && field.meta.error && <p className="help is-danger">{field.meta.error}</p>}
+    {(field.meta.touched && field.meta.error) ?
+    <p className="help is-danger">{field.meta.error}</p>
+    : <p className="help">&nbsp;</p>}
   </div>
 );
 
@@ -47,6 +50,9 @@ const validateForm = (values: FormValues): FormValues => {
   }
   if (!values.situation) {
     errors.situation = 'Required';
+  }
+  if (!values.birthdate) {
+    errors.birthdate = 'Required';
   }
   if (!values.email) {
     errors.email = 'Required';
@@ -107,16 +113,23 @@ const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
   return (
     <form onSubmit={handleSubmit}>
       <PeriodList selected={period} onChange={setPeriod} />
-      <FormField field={firstName} label="First name" placeholder="John" type="text" />
-      <FormField field={middleName} label="Middle name" placeholder="Bob" type="text" />
-      <FormField field={lastName} label="Last name" placeholder="Doe" type="text" />
-      <FormField field={email} label="Email address" placeholder="john.doe@example.com" type="email" />
-      <FormField field={birthdate} label="Birthdate" placeholder="1997/06/14" type="date" />
-      <FormField field={situation} label="Situation" placeholder="L2 math" type="text" />
-      <label className="checkbox">
-        <input {...subscribed.input} type="checkbox" />
-        {' Subscribed?'}
-      </label>
+      <div className="columns is-desktop">
+        <FormField field={firstName} label="First name" placeholder="John" type="text" />
+        <FormField field={middleName} label="Middle name" placeholder="Bob" type="text" />
+        <FormField field={lastName} label="Last name" placeholder="Doe" type="text" />
+      </div>
+      <div className="columns is-vcentered">
+        <FormField field={email} label="Email address" placeholder="john.doe@example.com" type="email" />
+        <label className="checkbox column is-narrow">
+          <input {...subscribed.input} type="checkbox" />
+          {' Subscribed?'}
+        </label>
+      </div>
+
+      <div className="columns">
+        <FormField field={birthdate} className="is-one-third" label="Birthdate" type="date" />
+        <FormField field={situation} label="Situation" placeholder="L2 math" type="text" />
+      </div>
       <div className="field">
         <div className="control">
           <button className="button is-primary" type="submit" disabled={pristine || submitting}>
