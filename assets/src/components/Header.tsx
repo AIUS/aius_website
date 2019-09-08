@@ -4,7 +4,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from './AuthProvider';
 
 const Header: React.FunctionComponent = () => {
-  const { claims } = useAuth();
+  const { claims, logout } = useAuth();
 
   return (
     <nav className="navbar is-primary" role="navigation">
@@ -33,6 +33,11 @@ const Header: React.FunctionComponent = () => {
               <div>
                 Hello <em>{claims.name}</em>.
               </div>
+            </div>
+            <div className="navbar-item">
+              <button className="button is-white" onClick={logout}>
+                Logout
+              </button>
             </div>
           </div>
         </div>
