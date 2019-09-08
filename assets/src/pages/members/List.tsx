@@ -4,6 +4,8 @@ import { RouteComponentProps, Link } from 'react-router-dom';
 import * as t from 'io-ts';
 import { isLeft } from 'fp-ts/lib/Either';
 import { PathReporter } from 'io-ts/lib/PathReporter';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 
 import { useAuth } from '../../components/AuthProvider';
 import MembershipWidget from '../../components/MembershipWidget';
@@ -77,7 +79,7 @@ const MembersList: React.FunctionComponent<Props> = () => {
               <a href={`mailto:${email}`}>{email}</a>
             </td>
             <td>
-              <i className={subscribed ? 'far fa-check-circle' : 'far fa-times-circle'} />
+              <FontAwesomeIcon icon={subscribed ? faCheckCircle : faTimesCircle} />
             </td>
             <td>{birthdate}</td>
             <td>

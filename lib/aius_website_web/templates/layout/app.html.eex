@@ -2,12 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Hello React!</title>
+    <title>AIUS</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
   </head>
   <body>
     <div id="app">Please enable JavaScript!</div>
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <script src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

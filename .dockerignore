@@ -17,3 +17,4 @@ aius_website-*.tar
 deps/
 erl_crash.dump
 npm-debug.log
+.keep
