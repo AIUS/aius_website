@@ -25,6 +25,8 @@ defmodule AiusWebsiteWeb.Router do
     get "/auth/uri", AuthController, :uri
   end
 
+  forward "/health", AiusWebsiteWeb.HealthPlug
+
   scope "/", AiusWebsiteWeb do
     pipe_through :browser
 
