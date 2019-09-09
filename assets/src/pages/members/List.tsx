@@ -9,33 +9,10 @@ import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icon
 
 import { useAuth } from '../../components/AuthProvider';
 import MembershipWidget from '../../components/MembershipWidget';
+import { UserV } from '../../models/user';
 
 const MembersV = t.type({
-  data: t.array(
-    t.type({
-      id: t.number,
-      /* eslint-disable @typescript-eslint/camelcase */
-      first_name: t.string,
-      middle_name: t.string,
-      last_name: t.string,
-      /* eslint-enable @typescript-eslint/camelcase */
-      email: t.string,
-      subscribed: t.boolean,
-      birthdate: t.union([t.string, t.nullType]),
-      memberships: t.array(
-        t.type({
-          id: t.number,
-          valid: t.boolean,
-          situation: t.string,
-          period: t.type({
-            id: t.number,
-            start: t.string,
-            end: t.string,
-          }),
-        }),
-      ),
-    }),
-  ),
+  data: t.array(UserV),
 });
 
 type Props = RouteComponentProps;

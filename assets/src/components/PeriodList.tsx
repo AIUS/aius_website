@@ -4,22 +4,11 @@ import * as t from 'io-ts';
 import { isLeft } from 'fp-ts/lib/Either';
 
 import { useAuth } from './AuthProvider';
+import { Period, PeriodV, formatPeriod } from '../models/period';
 
 const PeriodsV = t.type({
-  data: t.array(
-    t.type({
-      id: t.number,
-      start: t.string,
-      end: t.string,
-    }),
-  ),
+  data: t.array(PeriodV)
 });
-
-interface Period {
-  id: number;
-  start: string;
-  end: string;
-}
 
 interface Props {
   selected: number;
@@ -42,7 +31,7 @@ const PeriodList: React.FunctionComponent<Props> = ({ selected, onChange }: Prop
 
   const periods = r.right.data;
 
-  if (periods.length < 2) {
+  if (periods.length === 1) {
     if (selected !== periods[0].id) {
       onChange(periods[0].id);
     }
@@ -52,13 +41,13 @@ const PeriodList: React.FunctionComponent<Props> = ({ selected, onChange }: Prop
 
   return (
     <div className="buttons has-addons">
-      {periods.map(({ id, start, end }: Period) => (
+      {periods.map((period: Period) => (
         <button
-          key={id}
-          className={id === selected ? 'button is-selected is-success' : 'button'}
-          onClick={(): void => onChange(id)}
+          key={period.id}
+          className={period.id === selected ? 'button is-selected is-success' : 'button'}
+          onClick={(): void => onChange(period.id)}
         >
-          {start} / {end}
+          {formatPeriod(period)}
         </button>
       ))}
     </div>

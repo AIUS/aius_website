@@ -1,41 +1,13 @@
 import React, { useState } from 'react';
 
 import { useAuth } from './AuthProvider';
-
-interface Period {
-  start: string;
-  end: string;
-}
-
-interface Membership {
-  id: number;
-  period: Period;
-  valid: boolean;
-  situation: string;
-}
+import { Membership } from '../models/membership';
+import { Period, formatPeriod } from '../models/period';
 
 interface Props {
   membership: Membership;
   userId: number;
 }
-
-const formatPeriod = (period: Period): string => {
-  const [y1, m1, d1] = period.start.split('-');
-  const [y2, m2, d2] = period.end.split('-');
-  if (y1 !== y2) {
-    return `${y1}-${y2}`;
-  }
-
-  if (m1 !== m2) {
-    return `${m1}/${y1}-${m2}/${y2}`;
-  }
-
-  if (d1 !== d2) {
-    return `${d1}/${m1}/${y1}-${d2}/${m2}/${y2}`;
-  }
-
-  return `${d1}/${m1}/${y1}`;
-};
 
 const MembershipWidget: React.FunctionComponent<Props> = ({ membership, userId }: Props) => {
   const period = formatPeriod(membership.period);

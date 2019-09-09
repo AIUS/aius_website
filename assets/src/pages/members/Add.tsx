@@ -24,9 +24,11 @@ const FormField: React.FunctionComponent<FFProps> = ({ field, label, placeholder
         placeholder={placeholder}
       />
     </div>
-    {(field.meta.touched && field.meta.error) ?
-    <p className="help is-danger">{field.meta.error}</p>
-    : <p className="help">&nbsp;</p>}
+    {field.meta.touched && field.meta.error ? (
+      <p className="help is-danger">{field.meta.error}</p>
+    ) : (
+      <p className="help">&nbsp;</p>
+    )}
   </div>
 );
 
