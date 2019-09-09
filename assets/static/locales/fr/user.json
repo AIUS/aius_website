@@ -1,0 +1,20 @@
+{
+  "birthdate": "Année de naissance",
+  "email": "Courriel",
+  "email_example": "jean.dupont@exemple.fr",
+  "first_name": "Prénom",
+  "first_name_example": "Jean",
+  "id": "ID",
+  "last_name": "Nom de famille",
+  "last_name_example": "Dupont",
+  "memberships": "Adhésions",
+  "middle_name": "Second prénom / surnom",
+  "middle_name_example": "Marie",
+  "name": "Nom",
+  "required": "Requis",
+  "situation": "Filière / situation",
+  "situation_example": "L2 math, M1 CMI ISR, ancien…",
+  "subscribed": "Envoi de courriels",
+  "valid_email": "Veuiller entrer une adresse mél valide.",
+  "will_subscribe": "J'accepte de recevoir des mails d'informations de la part de l'AIUS"
+}

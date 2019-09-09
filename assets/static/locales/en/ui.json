@@ -1,0 +1,13 @@
+{
+  "add_member": "Add",
+  "aius": "AIUS",
+  "en": "English",
+  "fr": "French",
+  "greeting": "Hello <1>{{name}}</1>.",
+  "gsw": "Alsatian",
+  "home": "Home",
+  "loading": "Loading…",
+  "logout": "Logout",
+  "members": "Members",
+  "submit": "Submit"
+}

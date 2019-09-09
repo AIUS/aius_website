@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>AIUS</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
     <div id="app">Please enable JavaScript!</div>

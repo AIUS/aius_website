@@ -1,5 +1,6 @@
 import React from 'react';
 import useFetch from 'fetch-suspense';
+import { useTranslation } from 'react-i18next';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import * as t from 'io-ts';
 import { isLeft } from 'fp-ts/lib/Either';
@@ -18,6 +19,7 @@ const MembersV = t.type({
 type Props = RouteComponentProps;
 
 const MembersList: React.FunctionComponent<Props> = () => {
+  const { t } = useTranslation('user');
   const { token } = useAuth();
   const response = useFetch('/api/users', {
     headers: {
@@ -35,12 +37,12 @@ const MembersList: React.FunctionComponent<Props> = () => {
     <table className="table">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Subscribed</th>
-          <th>Birth date</th>
-          <th>Memberships</th>
+          <th>{t('id')}</th>
+          <th>{t('name')}</th>
+          <th>{t('email')}</th>
+          <th>{t('subscribed')}</th>
+          <th>{t('birthdate')}</th>
+          <th>{t('memberships')}</th>
         </tr>
       </thead>
       <tbody>

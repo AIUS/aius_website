@@ -1,0 +1,20 @@
+{
+  "birthdate": null,
+  "email": "E-Mail",
+  "email_example": null,
+  "first_name": null,
+  "first_name_example": null,
+  "id": "ID",
+  "last_name": null,
+  "last_name_example": null,
+  "memberships": null,
+  "middle_name": null,
+  "middle_name_example": null,
+  "name": null,
+  "required": null,
+  "situation": null,
+  "situation_example": null,
+  "subscribed": null,
+  "valid_email": null,
+  "will_subscribe": null
+}

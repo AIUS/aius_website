@@ -1,0 +1,20 @@
+{
+  "birthdate": "Birthdate",
+  "email": "Email address",
+  "email_example": "john.doe@example.com",
+  "first_name": "First name",
+  "first_name_example": "John",
+  "id": "ID",
+  "last_name": "Last name",
+  "last_name_example": "Doe",
+  "memberships": "Memberships",
+  "middle_name": "Middle name",
+  "middle_name_example": "W.",
+  "name": "Name",
+  "required": "Required",
+  "situation": "Situation",
+  "situation_example": "L2 math, M1 CMI ISR, ancien…",
+  "subscribed": "Subscribed",
+  "valid_email": "Please enter a valid email address.",
+  "will_subscribe": "I agree to receive information emails from AIUS"
+}

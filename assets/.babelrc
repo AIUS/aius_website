@@ -1,16 +1,23 @@
 {
-    "presets": [
-        "@babel/preset-react",
-        [
-            "@babel/preset-env",
-            {
-                "modules": false,
-                "targets": {
-                    "browsers": [
-                        "last 2 chrome versions"
-                    ]
-                }
-            }
-        ]
+  "presets": [
+    "@babel/preset-react",
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "targets": {
+          "browsers": [
+            "last 2 chrome versions"
+          ]
+        }
+      }
     ]
+  ],
+  "plugins": [
+    ["i18next-extract", {
+      "outputPath": "static/locales/{{locale}}/{{ns}}.json",
+      "locales": ["en", "fr", "gsw"],
+      "defaultValue": null
+    }]
+  ]
 }

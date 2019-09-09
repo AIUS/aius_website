@@ -1,0 +1,13 @@
+{
+  "add_member": null,
+  "aius": "Grande AIU'",
+  "en": "Änglisch",
+  "fr": "Französisch",
+  "greeting": "Wie geht's, <1>{{name}}?</1>",
+  "gsw": "Elsässisch",
+  "home": null,
+  "loading": null,
+  "logout": "Raus!",
+  "members": null,
+  "submit": null
+}

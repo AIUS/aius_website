@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useForm, useField, FieldRenderProps } from 'react-final-form-hooks';
 
 import { useAuth } from '../../components/AuthProvider';
@@ -42,31 +43,11 @@ interface FormValues {
   birthdate?: string;
 }
 
-const validateForm = (values: FormValues): FormValues => {
-  const errors: FormValues = {};
-  if (!values.firstName) {
-    errors.firstName = 'Required';
-  }
-  if (!values.lastName) {
-    errors.lastName = 'Required';
-  }
-  if (!values.situation) {
-    errors.situation = 'Required';
-  }
-  if (!values.birthdate) {
-    errors.birthdate = 'Required';
-  }
-  if (!values.email) {
-    errors.email = 'Required';
-  } else if (!values.email.match(/.+@.+/)) {
-    errors.email = 'Please enter a valid email address';
-  }
-  return errors;
-};
 
 type Props = RouteComponentProps;
 
 const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
+  const { t } = useTranslation('user');
   const [period, setPeriod] = useState(-1);
   const { token } = useAuth();
   const { form, handleSubmit, pristine, submitting } = useForm({
@@ -102,7 +83,27 @@ const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
           history.push(`/members/${r.data.id}`);
         });
     },
-    validate: validateForm,
+    validate(values: FormValues): FormValues {
+      const errors: FormValues = {};
+      if (!values.firstName) {
+        errors.firstName = t('required');
+      }
+      if (!values.lastName) {
+        errors.lastName = t('required');
+      }
+      if (!values.situation) {
+        errors.situation = t('required');
+      }
+      if (!values.birthdate) {
+        errors.birthdate = t('required');
+      }
+      if (!values.email) {
+        errors.email = t('required');
+      } else if (!values.email.match(/.+@.+/)) {
+        errors.email = t('valid_email');
+      }
+      return errors;
+    },
   });
   const firstName = useField('firstName', form);
   const middleName = useField('middleName', form);
@@ -116,26 +117,26 @@ const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
     <form onSubmit={handleSubmit}>
       <PeriodList selected={period} onChange={setPeriod} />
       <div className="columns is-desktop">
-        <FormField field={firstName} label="First name" placeholder="John" type="text" />
-        <FormField field={middleName} label="Middle name" placeholder="Bob" type="text" />
-        <FormField field={lastName} label="Last name" placeholder="Doe" type="text" />
+        <FormField field={firstName} label={t('first_name')} placeholder={t('first_name_example')} type="text" />
+        <FormField field={middleName} label={t('middle_name')} placeholder={t('middle_name_example')} type="text" />
+        <FormField field={lastName} label={t("last_name")} placeholder={t('last_name_example')} type="text" />
       </div>
       <div className="columns is-vcentered">
-        <FormField field={email} label="Email address" placeholder="john.doe@example.com" type="email" />
+        <FormField field={email} label={t("email")} placeholder={t('email_example')} type="email" />
         <label className="checkbox column is-narrow">
           <input {...subscribed.input} type="checkbox" />
-          {' Subscribed?'}
+          {' ' + t('will_subscribe')}
         </label>
       </div>
 
       <div className="columns">
-        <FormField field={birthdate} className="is-one-third" label="Birthdate" type="date" />
-        <FormField field={situation} label="Situation" placeholder="L2 math" type="text" />
+        <FormField field={birthdate} className="is-one-third" label={t('birthdate')} type="date" />
+        <FormField field={situation} label={t('situation')} placeholder={t('situation_example')} type="text" />
       </div>
       <div className="field">
         <div className="control">
           <button className="button is-primary" type="submit" disabled={pristine || submitting}>
-            Create
+            {t('ui:submit')}
           </button>
         </div>
       </div>

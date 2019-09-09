@@ -1,0 +1,13 @@
+{
+  "add_member": "Ajouter",
+  "aius": "AIUS",
+  "en": "Anglais",
+  "fr": "Français",
+  "greeting": "Bonjour <1>{{name}}</1>.",
+  "gsw": "Alsacien",
+  "home": "Accueil",
+  "loading": "Chargement…",
+  "logout": "Déconnexion",
+  "members": "Membres",
+  "submit": "Envoyer"
+}
