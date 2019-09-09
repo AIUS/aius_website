@@ -19,7 +19,7 @@ const MembersV = t.type({
 type Props = RouteComponentProps;
 
 const MembersList: React.FunctionComponent<Props> = () => {
-  const { t } = useTranslation('user');
+  const { t } = useTranslation('user');
   const { token } = useAuth();
   const response = useFetch('/api/users', {
     headers: {

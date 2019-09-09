@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as t from 'io-ts';
 
-import Membership, { MembershipV } from './Membership';
+import Membership, { MembershipV } from './membership';
 
 const UserV = t.type({
   id: t.number,

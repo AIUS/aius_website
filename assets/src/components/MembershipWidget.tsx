@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useAuth } from './AuthProvider';
 import { Membership } from '../models/membership';
-import { Period, formatPeriod } from '../models/period';
+import { formatPeriod } from '../models/period';
 
 interface Props {
   membership: Membership;

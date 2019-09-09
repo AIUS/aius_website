@@ -6,7 +6,7 @@ const LanguageSwitcher: React.FunctionComponent = () => {
   const [language, setLanguage] = useState(i18n.language);
 
   if (language !== i18n.language) {
-    throw new Promise(resolve => {
+    throw new Promise((resolve): void => {
       i18n.changeLanguage(language, () => {
         resolve();
       });
@@ -15,13 +15,22 @@ const LanguageSwitcher: React.FunctionComponent = () => {
 
   return (
     <div className="buttons has-addons">
-      <button className={language === 'en' ? "button is-small is-selected is-dark" : "button is-small"} onClick={() => setLanguage('en')}>
+      <button
+        className={language === 'en' ? 'button is-small is-selected is-dark' : 'button is-small'}
+        onClick={(): void => setLanguage('en')}
+      >
         {t('en')}
       </button>
-      <button className={language === 'fr' ? "button is-small is-selected is-dark" : "button is-small"} onClick={() => setLanguage('fr')}>
+      <button
+        className={language === 'fr' ? 'button is-small is-selected is-dark' : 'button is-small'}
+        onClick={(): void => setLanguage('fr')}
+      >
         {t('fr')}
       </button>
-      <button className={language === 'gsw' ? "button is-small is-selected is-dark" : "button is-small"} onClick={() => setLanguage('gsw')}>
+      <button
+        className={language === 'gsw' ? 'button is-small is-selected is-dark' : 'button is-small'}
+        onClick={(): void => setLanguage('gsw')}
+      >
         {t('gsw')}
       </button>
     </div>

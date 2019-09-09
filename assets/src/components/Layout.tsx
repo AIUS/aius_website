@@ -56,6 +56,6 @@ const Layout: React.FunctionComponent = () => {
       </main>
     </Router>
   );
-}
+};
 
 export default Layout;

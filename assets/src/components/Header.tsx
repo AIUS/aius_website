@@ -39,7 +39,7 @@ const Header: React.FunctionComponent = () => {
             <div className="navbar-item">
               <div>
                 <Trans i18nKey="ui:greeting">
-                  Hello <i>{{name}}</i>.
+                  Hello <i>{{ name }}</i>.
                 </Trans>
               </div>
             </div>

@@ -7,7 +7,7 @@ import { useAuth } from './AuthProvider';
 import { Period, PeriodV, formatPeriod } from '../models/period';
 
 const PeriodsV = t.type({
-  data: t.array(PeriodV)
+  data: t.array(PeriodV),
 });
 
 interface Props {

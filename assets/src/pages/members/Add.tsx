@@ -43,7 +43,6 @@ interface FormValues {
   birthdate?: string;
 }
 
-
 type Props = RouteComponentProps;
 
 const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
@@ -119,10 +118,10 @@ const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
       <div className="columns is-desktop">
         <FormField field={firstName} label={t('first_name')} placeholder={t('first_name_example')} type="text" />
         <FormField field={middleName} label={t('middle_name')} placeholder={t('middle_name_example')} type="text" />
-        <FormField field={lastName} label={t("last_name")} placeholder={t('last_name_example')} type="text" />
+        <FormField field={lastName} label={t('last_name')} placeholder={t('last_name_example')} type="text" />
       </div>
       <div className="columns is-vcentered">
-        <FormField field={email} label={t("email")} placeholder={t('email_example')} type="email" />
+        <FormField field={email} label={t('email')} placeholder={t('email_example')} type="email" />
         <label className="checkbox column is-narrow">
           <input {...subscribed.input} type="checkbox" />
           {' ' + t('will_subscribe')}
