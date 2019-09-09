@@ -1,6 +1,8 @@
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
-import Backend from 'i18next-xhr-backend';
+import Backend from 'i18next-chained-backend';
+import LocalStorageBackend from 'i18next-localstorage-backend';
+import XHRBackend from 'i18next-xhr-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18n
@@ -17,7 +19,16 @@ i18n
     },
 
     backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json'
+      backends: [LocalStorageBackend, XHRBackend],
+      backendOptions: [{
+        versions: {
+          fr: 'v0.1',
+          en: 'v0.1',
+          gsw: 'v0.1',
+        },
+      }, {
+        loadPath: '/locales/{{lng}}/{{ns}}.json',
+      }],
     }
   });
 
