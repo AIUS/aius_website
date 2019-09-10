@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 const LanguageSwitcher: React.FunctionComponent = () => {
   const { t, i18n } = useTranslation('ui');
-  const [language, setLanguage] = useState(i18n.language);
+  const [language, setLanguage] = useState(i18n.language.split('-')[0]);
 
   if (language !== i18n.language) {
     throw new Promise((resolve): void => {
