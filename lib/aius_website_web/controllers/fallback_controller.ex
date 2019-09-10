@@ -14,6 +14,7 @@ defmodule AiusWebsiteWeb.FallbackController do
   end
 
   def call(conn, {:error, :unauthorized}), do: call(conn, {:error, :unauthorized, "undefined"})
+
   def call(conn, {:error, :unauthorized, reason}) do
     conn
     |> put_status(:forbidden)

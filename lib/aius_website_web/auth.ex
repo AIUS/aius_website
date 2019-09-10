@@ -6,7 +6,7 @@ defmodule AiusWebsiteWeb.Auth do
   end
 
   def authenticate(conn, _) do
-    if Mix.env == :test do
+    if Mix.env() == :test do
       # TODO: valid/invalid tokens?
       conn
       |> assign(:claims, %{"sub" => "test"})
@@ -21,6 +21,7 @@ defmodule AiusWebsiteWeb.Auth do
           conn
           |> AiusWebsiteWeb.FallbackController.call({:error, :unauthorized, reason})
           |> halt
+
         _err ->
           conn
           |> AiusWebsiteWeb.FallbackController.call({:error, :unauthorized})
@@ -39,6 +40,7 @@ defmodule AiusWebsiteWeb.Auth do
       err -> err
     end
   end
+
   defp verify_exp(_), do: {:error, "expiration not found"}
 
   defp extract_token(conn) do

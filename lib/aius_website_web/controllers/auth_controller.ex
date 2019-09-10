@@ -4,10 +4,13 @@ defmodule AiusWebsiteWeb.AuthController do
   def uri(conn, _) do
     jwk = GenServer.call(:openid_connect, {:jwk, :aius})
     {_, jwk} = JOSE.JWK.to_map(jwk)
-    keys = Enum.map(jwk["keys"], fn j ->
-      {_, pem} = JOSE.JWK.to_pem(j)
-      Map.put(j, "pem", pem)
-    end)
+
+    keys =
+      Enum.map(jwk["keys"], fn j ->
+        {_, pem} = JOSE.JWK.to_pem(j)
+        Map.put(j, "pem", pem)
+      end)
+
     uri =
       OpenIDConnect.authorization_uri(:aius, %{
         redirect_uri: Routes.url(conn),
