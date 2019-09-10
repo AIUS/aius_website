@@ -4,7 +4,7 @@ import { useLocalStorage } from 'react-use';
 import jwt from 'jsonwebtoken';
 import React, { createContext, useContext, ReactNode, Context } from 'react';
 import * as t from 'io-ts';
-import { fold, isRight } from 'fp-ts/lib/Either';
+import { fold, isLeft } from 'fp-ts/lib/Either';
 
 const TokenClaimsV = t.type({
   sub: t.string,
@@ -20,6 +20,10 @@ interface TokenClaims {
 
 const AuthURIResponseV = t.type({
   uri: t.string,
+  jwk: t.array(t.type({
+    kid: t.string,
+    pem: t.string,
+  })),
 });
 
 interface AuthContextValue {
@@ -43,10 +47,23 @@ const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({ children }: 
   const response = useFetch('/api/auth/uri');
   const [token, setToken] = useLocalStorage('token', null, true);
   const logout = (): void => setToken(null);
+  const d = AuthURIResponseV.decode(response);
+  if (isLeft(d)) throw new Error("Invalid API response");
+  const { uri, jwk } = d.right;
 
   let claims: TokenClaims | null = null;
   if (token) {
-    const c = jwt.decode(token);
+    let c;
+    jwt.verify(token, (header, callback) => {
+      const key = jwk.find(k => k.kid === header.kid);
+      callback(null, key.pem);
+    }, (err, data) => {
+      if (err) {
+        logout();
+        throw new Promise(() => {});
+      }
+      c = data;
+    });
     const d = TokenClaimsV.decode(c);
     claims = fold(() => null, (t: TokenClaims) => t)(d);
   }
@@ -59,13 +76,7 @@ const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({ children }: 
     console.log(params);
     throw new Error();
   } else if (!claims || !claims.sub) {
-    const d = AuthURIResponseV.decode(response);
-
-    if (isRight(d)) {
-      window.location.href = d.right.uri;
-    } else {
-      throw new Error();
-    }
+    window.location.href = uri;
   }
 
   return (
