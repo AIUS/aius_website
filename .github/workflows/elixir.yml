@@ -3,8 +3,8 @@ name: Elixir CI
 on: push
 
 jobs:
-  build:
-
+  test:
+    name: "Run tests"
     runs-on: ubuntu-latest
 
     container:
@@ -19,3 +19,12 @@ jobs:
         mix deps.get
     - name: Run Tests
       run: mix test
+
+  build:
+    name: "Build docker image"
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/docker/cli@master
+      args: "build ."
