@@ -6,20 +6,26 @@ defmodule AiusWebsiteWeb.Auth do
   end
 
   def authenticate(conn, _) do
-    with {:ok, token} <- extract_token(conn),
-         {:ok, claims} <- OpenIDConnect.verify(:aius, token),
-         :ok <- verify_exp(claims) do
+    if Mix.env == :test do
+      # TODO: valid/invalid tokens?
       conn
-      |> assign(:claims, claims)
+      |> assign(:claims, %{"sub" => "test"})
     else
-      {:error, reason} ->
+      with {:ok, token} <- extract_token(conn),
+           {:ok, claims} <- OpenIDConnect.verify(:aius, token),
+           :ok <- verify_exp(claims) do
         conn
-        |> AiusWebsiteWeb.FallbackController.call({:error, :unauthorized, reason})
-        |> halt
-      _err ->
-        conn
-        |> AiusWebsiteWeb.FallbackController.call({:error, :unauthorized})
-        |> halt
+        |> assign(:claims, claims)
+      else
+        {:error, reason} ->
+          conn
+          |> AiusWebsiteWeb.FallbackController.call({:error, :unauthorized, reason})
+          |> halt
+        _err ->
+          conn
+          |> AiusWebsiteWeb.FallbackController.call({:error, :unauthorized})
+          |> halt
+      end
     end
   end
 
