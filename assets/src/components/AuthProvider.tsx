@@ -4,7 +4,8 @@ import { useLocalStorage } from 'react-use';
 import jwt from 'jsonwebtoken';
 import React, { createContext, useContext, ReactNode, Context } from 'react';
 import * as t from 'io-ts';
-import { fold, isLeft } from 'fp-ts/lib/Either';
+
+const STORAGE_KEY = 'token';
 
 const TokenClaimsV = t.type({
   sub: t.string,
@@ -20,71 +21,126 @@ interface TokenClaims {
 
 const AuthURIResponseV = t.type({
   uri: t.string,
-  jwk: t.array(t.type({
-    kid: t.string,
-    pem: t.string,
-  })),
+  jwk: t.array(
+    t.type({
+      kid: t.string,
+      pem: t.string,
+    }),
+  ),
 });
 
 interface AuthContextValue {
   token: string | null;
+  setToken: (token: string | null) => void;
+}
+
+interface AuthHook {
+  token: string;
+  claims: TokenClaims;
   logout: () => void;
-  claims: TokenClaims | null;
+  authenticatedFetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 }
 
 const AuthContext: Context<AuthContextValue> = createContext({
   token: null,
-  logout: () => {},
-  claims: null,
+  setToken: _ => {},
 });
-const useAuth = (): AuthContextValue => useContext(AuthContext);
 
 interface AuthProviderProps {
   children?: ReactNode;
 }
 
-const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({ children }: AuthProviderProps) => {
+const useAuth = (): AuthHook => {
   const response = useFetch('/api/auth/uri');
-  const [token, setToken] = useLocalStorage('token', null, true);
-  const logout = (): void => setToken(null);
-  const d = AuthURIResponseV.decode(response);
-  if (isLeft(d)) throw new Error("Invalid API response");
-  const { uri, jwk } = d.right;
+  if (!AuthURIResponseV.is(response)) throw new Error('Invalid API response');
+  const { uri, jwk } = response;
 
-  let claims: TokenClaims | null = null;
-  if (token) {
-    let c;
-    jwt.verify(token, (header, callback) => {
-      const key = jwk.find(k => k.kid === header.kid);
-      callback(null, key.pem);
-    }, (err, data) => {
-      if (err) {
+  const { token, setToken } = useContext(AuthContext);
+  const logout = (): void => setToken('');
+
+  const authenticatedFetch = (input: RequestInfo, init?: RequestInit): Promise<Response> => {
+    return fetch(input, {
+      ...(init || {}),
+      headers: {
+        ...((init && init.headers) || {}),
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(r => {
+      if (r.status === 403) {
         logout();
-        throw new Promise(() => {});
+        throw new Error('Forbidden');
       }
-      c = data;
+
+      return r;
     });
-    const d = TokenClaimsV.decode(c);
-    claims = fold(() => null, (t: TokenClaims) => t)(d);
+  };
+
+  let claims: TokenClaims;
+  if (token) {
+    jwt.verify(
+      token,
+      (header, callback) => {
+        const key = jwk.find(k => k.kid === header.kid);
+
+        if (!key) callback('key not found');
+        else callback(null, key.pem);
+      },
+      (err, data) => {
+        if (err || !TokenClaimsV.is(data)) return logout();
+
+        claims = data;
+      },
+    );
   }
 
+  if (!claims || !claims.sub) {
+    window.localStorage.removeItem(STORAGE_KEY);
+    window.location.href = uri;
+    throw new Promise((): void => {});
+  }
+
+  return { claims, token, logout, authenticatedFetch };
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const useAuthenticatedFetch = (input: RequestInfo, init?: RequestInit | undefined): Record<string, any> | string => {
+  const { token, logout } = useAuth();
+  const { status, response } = useFetch(
+    input,
+    {
+      ...(init || {}),
+      headers: {
+        ...((init && init.headers) || {}),
+        Authorization: `Bearer ${token}`,
+      },
+    },
+    { metadata: true },
+  );
+
+  if (status === 403) {
+    logout();
+    throw new Error('Forbidden');
+  }
+
+  return response;
+};
+
+const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({ children }: AuthProviderProps) => {
+  const [token, setToken] = useLocalStorage(STORAGE_KEY, null, true);
   const params = qs.parse(window.location.hash.replace(/^#/, ''));
   if (params.id_token) {
-    setToken(params.id_token);
+    setToken(Array.isArray(params.id_token) ? params.id_token[0] : params.id_token);
     window.location.hash = '';
   } else if (params.error) {
     console.log(params);
     throw new Error();
-  } else if (!claims || !claims.sub) {
-    window.location.href = uri;
   }
 
   return (
     <AuthContext.Provider
       value={{
         token,
-        logout,
-        claims,
+        setToken,
       }}
     >
       {children}
@@ -93,4 +149,4 @@ const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({ children }: 
 };
 
 export default AuthProvider;
-export { useAuth };
+export { useAuth, useAuthenticatedFetch };

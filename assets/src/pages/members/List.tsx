@@ -1,5 +1,4 @@
 import React from 'react';
-import useFetch from 'fetch-suspense';
 import { useTranslation } from 'react-i18next';
 import { RouteComponentProps, Link } from 'react-router-dom';
 import * as t from 'io-ts';
@@ -8,7 +7,7 @@ import { PathReporter } from 'io-ts/lib/PathReporter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 
-import { useAuth } from '../../components/AuthProvider';
+import { useAuthenticatedFetch } from '../../components/AuthProvider';
 import MembershipWidget from '../../components/MembershipWidget';
 import { UserV } from '../../models/user';
 
@@ -20,12 +19,7 @@ type Props = RouteComponentProps;
 
 const MembersList: React.FunctionComponent<Props> = () => {
   const { t } = useTranslation('user');
-  const { token } = useAuth();
-  const response = useFetch('/api/users', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = useAuthenticatedFetch('/api/users');
 
   const r = MembersV.decode(response);
   if (isLeft(r)) {

@@ -1,9 +1,7 @@
 import React from 'react';
-import useFetch from 'fetch-suspense';
 import * as t from 'io-ts';
-import { isLeft } from 'fp-ts/lib/Either';
 
-import { useAuth } from './AuthProvider';
+import { useAuthenticatedFetch } from './AuthProvider';
 import { Period, PeriodV, formatPeriod } from '../models/period';
 
 const PeriodsV = t.type({
@@ -16,20 +14,12 @@ interface Props {
 }
 
 const PeriodList: React.FunctionComponent<Props> = ({ selected, onChange }: Props) => {
-  const { token } = useAuth();
-  const r = PeriodsV.decode(
-    useFetch('/api/periods', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
-  );
-
-  if (isLeft(r)) {
+  const response = useAuthenticatedFetch('/api/periods');
+  if (!PeriodsV.is(response)) {
     throw new Error('Invalid API response');
   }
 
-  const periods = r.right.data;
+  const periods = response.data;
 
   if (periods.length === 1) {
     if (selected !== periods[0].id) {

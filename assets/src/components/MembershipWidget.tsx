@@ -13,12 +13,12 @@ const MembershipWidget: React.FunctionComponent<Props> = ({ membership, userId }
   const period = formatPeriod(membership.period);
   const [valid, setValid] = useState(membership.valid);
   const [updating, setUpdating] = useState(false);
-  const { token } = useAuth();
+  const { authenticatedFetch } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (updating) return;
 
-    fetch(`/api/users/${userId}/memberships/${membership.id}`, {
+    authenticatedFetch(`/api/users/${userId}/memberships/${membership.id}`, {
       method: 'PUT',
       body: JSON.stringify({
         membership: {
@@ -26,7 +26,6 @@ const MembershipWidget: React.FunctionComponent<Props> = ({ membership, userId }
         },
       }),
       headers: {
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     })

@@ -48,13 +48,12 @@ type Props = RouteComponentProps;
 const AddMember: React.FunctionComponent<Props> = ({ history }: Props) => {
   const { t } = useTranslation('user');
   const [period, setPeriod] = useState(-1);
-  const { token } = useAuth();
+  const { authenticatedFetch } = useAuth();
   const { form, handleSubmit, pristine, submitting } = useForm({
     onSubmit(v: FormValues) {
-      return fetch('/api/users', {
+      return authenticatedFetch('/api/users', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
